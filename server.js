@@ -18,6 +18,7 @@ return client;
 }
 
 
+
 app.get('/api/login', async (req, res) => {
     const client = await createConnection();
     const data = req.body;
@@ -37,3 +38,4 @@ app.post('/api/register', async (req, res) => {
 app.listen(5000, () => {
     console.log("Server Started in", 5000);
   });
+  
