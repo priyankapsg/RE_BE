@@ -19,11 +19,31 @@ return client;
 
 
 
-app.get('/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     const client = await createConnection();
     const data = req.body;
-    const data123 = await client.db('real_estate').collection('users').findOne({email:data?.email})
-    res.send(data123)
+    const result = await client.db('real_estate').collection('users').findOne({email:data?.email})
+    if(result === null){
+        res.send({
+            statusCode: 400
+        })
+    } 
+    else {
+        const result = await client.db('real_estate').collection('users').findOne({
+            email:data?.email,
+            password:data?.password}
+            )
+            if(result === null){
+                res.send({
+                    statusCode: 201
+                })  
+            }
+            else {
+                res.send({
+                    statusCode: 200
+                })  
+            }
+    }
 })
 
 
