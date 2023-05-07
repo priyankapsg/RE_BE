@@ -22,7 +22,7 @@ return client;
 app.post('/api/login', async (req, res) => {
     const client = await createConnection();
     const data = req.body;
-    const result = await client.db('real_estate').collection('users').findOne({email:data?.email})
+    const result = await client.db('real_estate').collection('users').findOne({email:data?.email.toLowerCase()})
     if(result === null){
         res.send({
             statusCode: 400
@@ -30,7 +30,7 @@ app.post('/api/login', async (req, res) => {
     } 
     else {
         const result = await client.db('real_estate').collection('users').findOne({
-            email:data?.email,
+            email:data?.email.toLowerCase(),
             password:data?.password}
             )
             if(result === null){
@@ -40,7 +40,8 @@ app.post('/api/login', async (req, res) => {
             }
             else {
                 res.send({
-                    statusCode: 200
+                    statusCode: 200,
+                    user: result
                 })  
             }
     }
@@ -58,4 +59,3 @@ app.post('/api/register', async (req, res) => {
 app.listen(5000, () => {
     console.log("Server Started in", 5000);
   });
-  
