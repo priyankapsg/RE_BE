@@ -1,7 +1,21 @@
-import express from "express";
+import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
+
+const mySchema = new Schema({
+        usertype : String,
+        username : String,
+        email : String,
+        mobile : String,
+        password : String
+  });
+  
+  // Create a Mongoose model for your collection
+  const MyModel = mongoose.model('users', mySchema);
+
 
 dotenv.config();
 const app = express();
@@ -52,6 +66,19 @@ app.post('/api/register', async (req, res) => {
     const client = await createConnection();
     const data123 = req.body
     const data = await client.db('real_estate').collection('users').insertOne(data123)
+    res.send(data)
+})
+
+app.post('/api/flat', async (req, res) => {
+    const client = await createConnection();
+    const data123 = req.body
+    const data = await client.db('real_estate').collection('flat').insertOne(data123)
+    res.send(data)
+})
+
+app.get('/api/flat', async (req, res) => {
+    const client = await createConnection();
+    const data = await client.db('real_estate').collection('flat').find().toArray();
     res.send(data)
 })
 
