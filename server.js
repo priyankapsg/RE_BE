@@ -65,8 +65,18 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const client = await createConnection();
     const data123 = req.body
-    const data = await client.db('real_estate').collection('users').insertOne(data123)
-    res.send(data)
+    const result = await client.db('real_estate').collection('users').findOne({email:data123?.email.toLowerCase()})
+    if(result?.email.length > 0){
+        res.send({
+            statusCode: 400
+        })
+    } else {
+        const data = await client.db('real_estate').collection('users').insertOne(data123)
+        res.send({
+            data: data,
+            statusCode: 200
+        })
+    } 
 })
 
 app.post('/api/flat', async (req, res) => {
@@ -76,10 +86,26 @@ app.post('/api/flat', async (req, res) => {
     res.send(data)
 })
 
-app.get('/api/flat', async (req, res) => {
+app.get(`/api/flats/:type`, async (req, res) => {
     const client = await createConnection();
-    const data = await client.db('real_estate').collection('flat').find().toArray();
+    const params = req.param("type");
+    const data = await client.db('real_estate').collection('flat').find({property:params}).toArray();
     res.send(data)
+})
+
+app.get('/api/flat/:type', async (req, res) => {
+    const client = await createConnection();
+    const params = req.param("type");
+    const data = await client.db('real_estate').collection('flat').find({email:params}).toArray();
+    if(data.length > 0) res.send({
+        statusCode: 200,
+        data: data
+    })
+    else {
+        res.send({
+            statusCode: 400,
+        })
+    }
 })
 
 
