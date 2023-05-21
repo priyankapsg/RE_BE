@@ -17,6 +17,10 @@ const contactSchema = new Schema({
     mobile : {
         type: String,
         required: true
+    },
+    flat_id : {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 });
 

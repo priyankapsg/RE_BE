@@ -1,5 +1,6 @@
 import Contact from '../model/contactSchema.js';
 import Flat from '../model/flatSchema.js';
+import User from '../model/userSchema.js';
 import mongoose from 'mongoose';
 
 const getContact = async (req, res) => {
@@ -8,8 +9,8 @@ try {
         {
             $lookup: {
                 from: 'flats', 
-                localField: 'ownerEmail',                
-                foreignField: 'email',
+                localField: 'flat_id',                
+                foreignField: '_id',
                 as: 'common'
             }
         }
